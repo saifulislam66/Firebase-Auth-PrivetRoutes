@@ -3,7 +3,11 @@ import { AuthContext } from "../ContextApi/AuthContext";
 import { Navigate } from "react-router";
 
 function PrivetRoutes({ children }) {
-  const { user } = use(AuthContext);
+  const { user, userLoder } = use(AuthContext);
+
+  if (userLoder) {
+    return <span>Lodding.....</span>;
+  }
 
   if (!user) {
     return <Navigate to="/login"></Navigate>;

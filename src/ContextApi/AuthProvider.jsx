@@ -10,19 +10,24 @@ import { auth } from "../Firebase/FirebaseAuth";
 
 function AuthProvider({ children }) {
   const [user, SetUser] = useState(null);
+  const [userLoder, setUserLoder] = useState(true);
 
   const createUser = (email, password) => {
+    setUserLoder(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
   const singInUser = (email, password) => {
+    setUserLoder(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
   const logOutUser = () => {
+    setUserLoder(true);
     signOut(auth)
       .then((res) => {
         console.log(res);
+        setUserLoder(true);
       })
       .then((error) => {
         console.log(error);
@@ -39,6 +44,7 @@ function AuthProvider({ children }) {
     const unSubscribe = onAuthStateChanged(auth, (currenUser) => {
       // console.log("curren user insite state", currenUser);
       SetUser(currenUser);
+      setUserLoder(false);
     });
     return () => {
       unSubscribe();
@@ -46,6 +52,7 @@ function AuthProvider({ children }) {
   }, []);
   const userInfo = {
     user,
+    userLoder,
     logOutUser,
     createUser,
     singInUser,
